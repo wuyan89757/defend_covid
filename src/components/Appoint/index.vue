@@ -1,57 +1,39 @@
 <template>
   <div class="container">
-    <div class="content">
-      <div
-        v-for="(item, index) in Appoint"
-        :key="index"
-        class="box"
-      >
+    <ul class="content">
+      <li v-for="(item, index) in Appoint" :key="index" class="box">
         <div class="top">
-          <div class="left">
-            <div class="name">{{ item.rolesName }}</div>
-            <div class="dotor">全职医生</div>
-          </div>
-          <div class="right">
-            <img
-              :src="urlHandle(item.avatar)"
-              alt=""
-            >
-          </div>
+          <!-- <div class="top"> -->
+          <img :src="urlHandle(item.avatar)" alt="" />
+          <!-- </div> -->
         </div>
         <div class="bottom">
+          <div class="info clearfix">
+            <div class="name">{{ item.rolesName }}</div>
+            <div class="doctor">主任医师</div>
+          </div>
           <div class="btop">
-            <span>善于：{{ item.description }}</span>
+            <span><i>善于：</i>{{ item.description }}</span>
           </div>
           <div class="bbttom">
-            <label class="label">可预约人数 {{ handleRank(item.user_id) }}</label>
+            <label class="label"><i>可预约人数： </i>{{ handleRank(item.user_id) }}</label>
             <el-button
-              size="mini"
               type="primary"
               :disabled="
                 handleRank(item.user_id) == 0 || (start && starttime > '18:00') ? true : false
               "
               @click="handleAppoint(item)"
-            >预约</el-button>
+            >
+              预约
+            </el-button>
           </div>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
     <!-- 添加按钮模态框 -->
-    <el-dialog
-      :title="title"
-      :visible.sync="open"
-    >
-      <el-form
-        ref="proFrom"
-        :model="addappoint"
-        :rules="rules"
-      >
-        <el-descriptions
-          v-if="addappoint"
-          class="margin-top"
-          title="基本信息"
-          :column="3"
-        >
+    <el-dialog :title="title" :visible.sync="open">
+      <el-form ref="proFrom" :model="addappoint" :rules="rules">
+        <el-descriptions v-if="addappoint" class="margin-top" title="基本信息" :column="3">
           <el-descriptions-item label="用户名">{{ addappoint.username }}</el-descriptions-item>
           <el-descriptions-item label="年龄">{{ addappoint.sex }}</el-descriptions-item>
           <el-descriptions-item label="性别">{{ addappoint.age }}</el-descriptions-item>
@@ -59,10 +41,7 @@
           <el-descriptions-item label="身份证号">{{ addappoint.identity }}</el-descriptions-item>
           <el-descriptions-item label="预约医生">{{ addappoint.rolesName }}</el-descriptions-item>
         </el-descriptions>
-        <el-form-item
-          label="预计到达时间"
-          prop="startTime"
-        >
+        <el-form-item label="预计到达时间" prop="startTime">
           <el-time-select
             v-model="addappoint.startTime"
             placeholder="到达时间"
@@ -75,15 +54,9 @@
           />
         </el-form-item>
       </el-form>
-      <div
-        slot="footer"
-        class="dialog-footer"
-      >
+      <div slot="footer" class="dialog-footer">
         <el-button @click="open = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="toSaves('proFrom')"
-        >确 定</el-button>
+        <el-button type="primary" @click="toSaves('proFrom')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -132,6 +105,7 @@ export default {
       return url ? process.env.VUE_APP_BASE_API + `/public/upload/` + url : ''
     },
     handleAppoint(item) {
+      // console.log(this.Appoint) //test
       const obj = {
         user_id: this.user_id,
         time: this.status
@@ -228,14 +202,16 @@ export default {
     display: flex;
     flex-wrap: wrap;
     .box {
-      width: 20%;
-      height: 250px;
+      list-style-type: none;
+      width: 12%;
+      height: 340px;
       margin-left: 50px;
       border: 1px solid #dcdfe6;
       transition: all 0.3s linear;
       border-radius: 2px;
       padding: 5px;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
+
       &:hover {
         transition: opacity 2s cubic-bezier(0.165, 0.84, 0.44, 1);
         box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
@@ -245,16 +221,11 @@ export default {
       width: 100%;
       height: 50%;
       display: flex;
-      .left {
-        width: 50%;
-        height: 100%;
-        padding: 20px;
-        padding-top: 40px;
-        color: #909399;
-        .name {
-          margin-bottom: 20px;
-        }
+      img {
+        display: block;
+        margin: 0 auto;
       }
+
       .right {
         width: 50%;
         height: 100%;
@@ -267,20 +238,71 @@ export default {
     }
     .bottom {
       width: 100%;
-      height: 50%;
+      height: 45%;
       font-size: 14px;
-      padding: 10px;
+      padding: 3px 10px;
       color: #909399;
+      .info {
+        height: 22px;
+        margin-bottom: 6px;
+        color: #909399;
+        .name {
+          float: left;
+          font-size: 18px;
+          font-weight: bold;
+          font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, '\5B8B\4F53',
+            sans-serif;
+        }
+        .doctor {
+          float: right;
+          height: 14px;
+          margin-top: 4px;
+          margin-right: 8px;
+          background-color: teal;
+          font-size: 12px;
+          color: #fff;
+          line-height: 14px;
+        }
+      }
       .btop {
         width: 100%;
-        height: 60%;
+        height: 50%;
         word-wrap: break-word;
+        span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          /*弹性伸缩盒子模型显示*/
+          display: -webkit-box;
+          /*限制在一个块元素显示的文本的行数*/
+          -webkit-line-clamp: 4;
+          /*设置或检索伸缩盒对象的子元素的排列方式*/
+          -webkit-box-orient: vertical;
+          i {
+            font-style: normal;
+            font-weight: bold;
+          }
+        }
       }
       .bbttom {
         height: 40%;
-        margin-top: 20px;
+        margin-top: 4px;
         .label {
-          margin-right: 70px;
+          display: block;
+          i {
+            font-style: normal;
+            font-weight: bold;
+          }
+        }
+        button {
+          width: 100%;
+          height: 34px;
+          border: none;
+          margin-top: 7px;
+          background-color: teal;
+          color: #fff;
+          font-size: 14px;
+          font-weight: bold;
+          letter-spacing: 8px;
         }
       }
     }

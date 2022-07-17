@@ -1,89 +1,40 @@
 <template>
   <div class="order">
-    <el-tabs
-      v-model="activeName"
-      type="border-card"
-      @tab-click="tabClickHandler"
-    >
-      <el-tab-pane
-        label="预约记录"
-        name="预约记录"
-      >
+    <el-tabs v-model="activeName" type="border-card" @tab-click="tabClickHandler">
+      <el-tab-pane label="预约记录" name="预约记录">
         <apppoint-acount :key="active1" />
       </el-tab-pane>
-      <el-tab-pane
-        label="预约"
-        name="预约"
-      >
-        <div
-          :key="active2"
-          class="box"
-        >
+      <el-tab-pane label="预约" name="预约">
+        <div :key="active2" class="box">
           <div class="top">
             <div class="content">
-              <div
-                v-for="(item, index) in data"
-                :key="index"
-                class="week"
-              >
+              <div v-for="(item, index) in data" :key="index" class="week">
                 {{ item.weeK }}
               </div>
             </div>
           </div>
           <div class="bottom">
-            <el-tabs
-              v-if="data.length > 0"
-              v-model="now"
-              @tab-click="handleClick"
-            >
-              <el-tab-pane
-                :label="data[0].date"
-                :name="data[0].date"
-              ><apppoint-doctor
-                :key="actives1"
-                status="0"
+            <el-tabs v-if="data.length > 0" v-model="now" @tab-click="handleClick">
+              <el-tab-pane :label="data[0].date" :name="data[0].date"
+                ><apppoint-doctor :key="actives1" status="0"
               /></el-tab-pane>
-              <el-tab-pane
-                :label="data[1].date"
-                :name="data[1].date"
-              ><apppoint-doctor
-                :key="actives2"
-                status="1"
+              <el-tab-pane :label="data[1].date" :name="data[1].date"
+                ><apppoint-doctor :key="actives2" status="1"
               /></el-tab-pane>
-              <el-tab-pane
-                :label="data[2].date"
-                :name="data[2].date"
-              ><apppoint-doctor
-                :key="actives3"
-                status="2"
+              <el-tab-pane :label="data[2].date" :name="data[2].date"
+                ><apppoint-doctor :key="actives3" status="2"
               /></el-tab-pane>
-              <el-tab-pane
-                :label="data[3].date"
-                :name="data[3].date"
-              ><apppoint-doctor
-                :key="actives4"
-                status="3"
+              <el-tab-pane :label="data[3].date" :name="data[3].date"
+                ><apppoint-doctor :key="actives4" status="3"
               /></el-tab-pane>
-              <el-tab-pane
-                :label="data[4].date"
-                :name="data[4].date"
-              ><apppoint-doctor
-                :key="actives5"
-                status="4"
+              <el-tab-pane :label="data[4].date" :name="data[4].date"
+                ><apppoint-doctor :key="actives5" status="4"
               /></el-tab-pane>
-              <el-tab-pane
-                :label="data[5].date"
-                :name="data[5].date"
-              ><apppoint-doctor
-                :key="actives6"
-                status="5"
+              <el-tab-pane :label="data[5].date" :name="data[5].date"
+                ><apppoint-doctor :key="actives6" status="5"
               /></el-tab-pane>
-              <el-tab-pane
-                :label="data[6].date"
-                :name="data[6].date"
-              ><apppoint-doctor
-                :key="actives7"
-                status="6"
+              <el-tab-pane :label="data[6].date" :name="data[6].date"
+                ><apppoint-doctor :key="actives7" status="6"
               /></el-tab-pane>
             </el-tabs>
           </div>

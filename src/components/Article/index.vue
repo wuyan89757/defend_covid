@@ -3,12 +3,7 @@
     <div class="g-notice">
       <div class="m-table interval">
         <div class="m-line interval">
-          <el-form
-            ref="queryForm"
-            :model="params"
-            :inline="true"
-            @submit.native.prevent
-          >
+          <el-form ref="queryForm" :model="params" :inline="true" @submit.native.prevent>
             <el-form-item prop="title">
               <el-input
                 v-model="params.title"
@@ -19,41 +14,25 @@
               />
             </el-form-item>
             <el-form-item>
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                size="mini"
-                @click="handlerquery"
-              >搜索</el-button>
-              <el-button
-                type="primary"
-                icon="el-icon-plus"
-                size="mini"
-                @click="handleAdd"
-              >分享</el-button>
+              <el-button type="primary" icon="el-icon-search" size="mini" @click="handlerquery"
+                >搜索</el-button
+              >
+              <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd"
+                >分享</el-button
+              >
             </el-form-item>
           </el-form>
         </div>
         <div class="content">
-          <div
-            v-for="(item, index) in list"
-            :key="index"
-            class="box"
-          >
+          <div v-for="(item, index) in list" :key="index" class="box">
             <div class="meta-container">
-              <div
-                class="name"
-                @click="handlertoRouter(item)"
-              >
+              <div class="name" @click="handlertoRouter(item)">
                 {{ item.author }}
               </div>
               <div class="dividing" />
               <div class="date">{{ item.publish_time | borthdate }}</div>
             </div>
-            <div
-              class="bottom"
-              @click="handlertoRouter(item)"
-            >
+            <div class="bottom" @click="handlertoRouter(item)">
               <div class="left">
                 <div class="title">
                   {{ item.title }}
@@ -69,10 +48,7 @@
                 </div>
               </div>
               <div class="right">
-                <img
-                  :src="urlHandle(item.url)"
-                  alt=""
-                >
+                <img :src="urlHandle(item.url)" alt="" />
               </div>
             </div>
           </div>
@@ -139,8 +115,10 @@ export default {
       })
     },
     handlerquery() {
+      // console.log(this);
       // 过滤查询参数，将空字符串的键值对删除掉
       for (const key in this.params) {
+        // console.log(this.params[key])
         if (this.params[key] == '') {
           delete this.params[key]
         }
