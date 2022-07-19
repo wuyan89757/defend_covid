@@ -3,12 +3,7 @@
     <div class="g-notice">
       <div class="m-table interval">
         <div class="m-line interval">
-          <el-form
-            ref="queryForm"
-            :model="params"
-            :inline="true"
-            @submit.native.prevent
-          >
+          <el-form ref="queryForm" :model="params" :inline="true" @submit.native.prevent>
             <el-form-item prop="title">
               <el-input
                 v-model="params.title"
@@ -19,48 +14,27 @@
               />
             </el-form-item>
             <el-form-item>
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                size="mini"
-                @click="handlerquery"
-              >搜索</el-button>
+              <el-button type="primary" icon="el-icon-search" size="mini" @click="handlerquery"
+                >搜索</el-button
+              >
             </el-form-item>
           </el-form>
         </div>
         <template>
-          <el-table
-            :data="list"
-            style="width: 100%"
-            :row-style="{ height: '80px' }"
-          >
-            <el-table-column
-              label="标题"
-              align="center"
-              width="300"
-            >
+          <el-table :data="list" style="width: 100%" :row-style="{ height: '80px' }">
+            <el-table-column label="标题" align="center" width="300">
               <template slot-scope="scope">
-                <div
-                  class="text"
-                  @click="handlertoRouter(scope.row.id)"
-                >
+                <div class="text" @click="handlertoRouter(scope.row.id)">
                   {{ scope.row.title }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              label="摘要"
-              align="center"
-            >
+            <el-table-column label="摘要" align="center">
               <template slot-scope="scope">
                 <p v-html="handlerText(scope.row.description)" />
               </template>
             </el-table-column>
-            <el-table-column
-              label="发布时间"
-              width="200"
-              align="center"
-            >
+            <el-table-column label="发布时间" width="200" align="center">
               <template slot-scope="scope">
                 {{ scope.row.publish_time | borthdate }}
               </template>
@@ -128,22 +102,28 @@ export default {
 <style scoped lang="scss">
 .app-container {
   background-color: #e9ebec;
+
   .g-notice {
     width: 90%;
     padding: 20px 30px;
     margin: 0 auto;
+
     .text {
       color: #1890ff;
+
       &:hover {
         cursor: pointer;
       }
     }
+
     .interval {
       margin-top: 10px;
     }
+
     .m-line {
       display: flex;
     }
+
     .z-title {
       font-size: 16px;
     }
