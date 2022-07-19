@@ -2,22 +2,21 @@
   <div class="order">
     <el-tabs v-model="activeName" type="border-card" @tab-click="tabClickHandler">
       <el-tab-pane label="疫情数据" name="疫情数据">
-        <community-notice :key="active1" type="疫情数据" />
+        <covid-data :key="active1" type="疫情数据" />
       </el-tab-pane>
       <el-tab-pane label="新闻" name="新闻">
-        <community-news :key="active2" type="新闻" />
+        <covid-news :key="active2" type="新闻" />
       </el-tab-pane>
-      <el-tab-pane label="文章" type="文章">
-        <community-article :key="active3" type="文章" />
+      <el-tab-pane label="谣言" type="谣言">
+        <covid-rumor :key="active3" type="谣言" />
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-import communityNotice from '@/components/Notice/index.vue'
-import communityNews from '@/components/News/index.vue'
-import communityArticle from '@/components/Article/index.vue'
-import communityChart from '@/components/Chart/chat.vue'
+import covidData from '@/components/Covid'
+import covidNews from '@/components/News/covid_news.vue'
+import covidRumor from '@/components/Rumor'
 export default {
   data() {
     return {
@@ -30,10 +29,9 @@ export default {
   },
 
   components: {
-    communityNotice,
-    communityNews,
-    communityArticle,
-    communityChart
+    covidData,
+    covidRumor,
+    covidNews
   },
   methods: {
     tabClickHandler(tab) {
@@ -47,9 +45,6 @@ export default {
         case 2:
           this.active3 = new Date().getTime()
           break
-        case 3:
-          this.active4 = new Date().getTime()
-          break
         default:
           break
       }
@@ -58,4 +53,3 @@ export default {
   created() {}
 }
 </script>
-<style scoped lang="scss"></style>
