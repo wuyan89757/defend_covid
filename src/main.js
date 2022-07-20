@@ -22,6 +22,11 @@ import './styles/index.scss'
 import fmtDateTime from './filter/time' // 导入过滤器
 import borthdate from './filter/borth'
 import VueSocketIo from 'vue-socket.io'
+
+// 全局echarts对象挂载到vue原型对象
+// this.$echarts
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 /*
 导入疫情数据
 overall：病毒研究情况以及全国疫情概览

@@ -1,6 +1,8 @@
 <template>
   <div :class="{ hidden: hidden }" class="pagination-container">
     <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
       :background="background"
       :current-page.sync="currentPage"
       :page-sizes="pagesizes"
@@ -117,6 +119,7 @@ export default {
     }
   },
   methods: {
+    // pageSize 改变时会触发 返回当前页面和分页大小
     handleSizeChange(val) {
       if (this.currentPage * val > this.total) {
         this.currentPage = 1
@@ -126,6 +129,7 @@ export default {
       //     scrollTo(0, 800)
       //   }
     },
+    // currentPage 改变时会触发 返回当前页面和分页大小
     handleCurrentChange(val) {
       this.$emit('pagination', { page: val, limit: this.pageSize })
       //   if (this.autoScroll) {

@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import getNews from '@/api/covid/news'
+import { getNews } from '@/api/covid'
 import Pagination from '../pagination'
 
 export default {
