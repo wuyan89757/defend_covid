@@ -1,5 +1,5 @@
 <!-- covid页面的内部主要组件 -->
-<!-- covid页面的内部主要组件 谣言-->
+<!-- covid页面的内部主要组件 新闻-->
 <template>
   <div class="app-container">
     <div class="g-notice">
@@ -7,9 +7,9 @@
         <el-table :data="results" style="width: 100%" :row-style="{ height: '80px' }">
           <el-table-column label="标题" align="center" width="500">
             <template slot-scope="scope">
-              <div class="text" @click="handlertoRouter(scope.row.id)">
+              <a class="text" :href="scope.row.sourceUrl">
                 {{ scope.row.title }}
-              </div>
+              </a>
             </template>
           </el-table-column>
           <el-table-column label="消息来源" align="center">
@@ -17,12 +17,6 @@
               <p v-html="handlerText(scope.row.infoSource)" />
             </template>
           </el-table-column>
-          <!-- <el-table-column label="真实情况" width="200" align="center">
-            <template slot-scope="scope">
-              {{ scope.row.publish_time | borthdate }}
-              {{ scope.row.summary }}
-            </template>
-          </el-table-column> -->
           <el-table-column label="发布时间" width="300" align="center">
             <template slot-scope="scope">
               {{ Number(scope.row.pubDate) | fmtDateTime }}
@@ -31,35 +25,20 @@
           </el-table-column>
         </el-table>
       </template>
-
-      <div class="m-table interval">
-        <div class="m-line interval">
-          <div id="pages">
-            <i><a href="#">1</a></i>
-            <i><a href="#">2</a></i>
-            <i><a href="#">3</a></i>
-            <i><a href="#">4</a></i>
-            <i><a href="#">5</a></i>
-            <i>···</i>
-          </div>
-          <el-form @submit.native.prevent :inline="true">
-            <el-form-item>
-              <el-input placeholder="切换到" clearable size="small" @keyup.enter.native="" />
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-refresh" size="mini" @click=""
-                >切换</el-button
-              >
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
+      <Pagination
+        :total="100"
+        :limit.sync="pageSize"
+        :page-size.sync="pageSize"
+        :page.sync="currentPage"
+        :pagesizes="[10, 20, 50]"
+      />
     </div>
   </div>
 </template>
 
 <script>
-// import { queryArticle } from '@/api/user'
+import getNews from '@/api/covid/news'
+import Pagination from '../pagination'
 
 export default {
   props: {
@@ -67,6 +46,9 @@ export default {
       type: String,
       default: null
     }
+  },
+  components: {
+    Pagination
   },
   data() {
     return {
@@ -184,8 +166,7 @@ export default {
           province: null,
           provinceId: ''
         }
-      ],
-      success: true
+      ]
     }
   },
   //   data() {
@@ -208,11 +189,18 @@ export default {
         return ''
       }
     },
-    handlertoRouter(id) {
-      this.$router.push({
-        path: `/detail/${id}`
-      })
-    },
+    // 请求数据
+    // fetchDataNoMessage(page, num) {
+    //   this.list = getNews(page, num)
+    // },
+    // pagination(p) {
+    //   this.fetchDataNoMessage(p.page, p.limit)
+    // },
+    // handlertoRouter(id) {
+    //   this.$router.push({
+    //     path: `/detail/${id}`
+    //   })
+    // },
     handlerquery() {
       // 过滤查询参数，将空字符串的键值对删除掉
       for (const key in this.params) {
@@ -220,10 +208,17 @@ export default {
           delete this.params[key]
         }
       }
-      //   queryArticle(this.params).then(res => {
-      //     this.list = res.data
-      //   })
-    }
+      getNews(this.params).then(res => {
+        this.list = res.data
+      })
+    },
+    // addCurrentPage() {
+    //   this.currentPage += 4;
+    // },
+    // reduceCurrentPage() {
+    //   this.currentPage -= 4;
+    // },
+    changePage() {}
   },
   created() {
     this.handlerquery()
@@ -239,7 +234,11 @@ export default {
     width: 90%;
     padding: 20px 30px;
     margin: 0 auto;
-
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .text {
       color: #1890ff;
 
@@ -260,15 +259,16 @@ export default {
 
         i {
           float: left;
-          width: 20px;
-          height: 20px;
+          width: 25px;
+          height: 25px;
           margin-right: 10px;
           border: 1px solid rgb(0, 128, 128);
           border-radius: 50%;
           list-style: none;
           transition: all 0.2s ease;
-          line-height: 20px;
+          line-height: 25px;
           text-align: center;
+          color: rgb(0, 128, 128);
 
           a {
             display: block;

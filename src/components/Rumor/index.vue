@@ -24,36 +24,20 @@
           </el-table-column>
         </el-table>
       </template>
-
-      <div class="m-table interval">
-        <div class="m-line interval">
-          <div id="pages">
-            <i><a href="#">1</a></i>
-            <i><a href="#">2</a></i>
-            <i><a href="#">3</a></i>
-            <i><a href="#">4</a></i>
-            <i><a href="#">5</a></i>
-            <i>···</i>
-            <!-- <div></div> -->
-          </div>
-          <el-form @submit.native.prevent :inline="true">
-            <el-form-item>
-              <el-input placeholder="切换到" clearable size="small" @keyup.enter.native="" />
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-refresh" size="mini" @click=""
-                >切换</el-button
-              >
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
+      <Pagination
+        @pagination="pagination"
+        v-show="total > 0"
+        :total="total"
+        :page.sync="currentPage"
+        :limit.sync="pageSize"
+      />
     </div>
   </div>
 </template>
 
 <script>
 // import { queryArticle } from '@/api/user'
+import Pagination from '../pagination'
 
 export default {
   props: {
@@ -64,6 +48,7 @@ export default {
   },
   data() {
     return {
+      total: 1,
       pageSize: 10, //每页多少条
       currentPage: 1, // 当前页
       list: [],
@@ -141,7 +126,13 @@ export default {
   //       }
   //     }
   //   },
+  components: {
+    Pagination
+  },
   methods: {
+    pagination(p) {
+      this.fetchDataNoMessage(p.page, p.limit)
+    },
     handlerText(item) {
       if (item) {
         if (Array.from(item).length > 20) {
@@ -170,6 +161,9 @@ export default {
       //   })
     }
   },
+  changePage() {
+    console.log('changepage')
+  },
   created() {
     this.handlerquery()
   }
@@ -184,6 +178,11 @@ export default {
     width: 90%;
     padding: 20px 30px;
     margin: 0 auto;
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
     .text {
       color: #1890ff;
@@ -231,6 +230,7 @@ export default {
           transition: all 0.5s;
           background-color: rgb(0, 128, 128);
           color: #fff;
+
           a {
             color: #fff;
           }
@@ -242,6 +242,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+
       form {
         height: 100%;
         margin-bottom: 0;

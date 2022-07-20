@@ -23,6 +23,7 @@
     "axios": "0.18.1",
     "commitlint": "^17.0.1",
     "core-js": "^3.21.1",
+    "echarts": "^5.3.3",
     "element-ui": "2.15.7",
     "html2canvas": "^1.4.1",
     "husky": "^8.0.1",

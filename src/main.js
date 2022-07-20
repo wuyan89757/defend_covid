@@ -30,21 +30,20 @@ area：中国所有省份、地区或直辖市及世界其他国家的所有疫�
 news：所有与疫情有关的新闻信息，包含数据来源以及数据来源链接
 rumors：与疫情有关的谣言以及丁香园的辟谣
 */
-import overall from './api/overall'
-Vue.prototype.$overall = overall
+// import overall from './api/covid/overall'
+// Vue.prototype.$overall = overall
 
-import provinceName from './api/provinceName'
-Vue.prototype.$provinceName = provinceName
+// import provinceName from './api/covid/provinceName'
+// Vue.prototype.$provinceName = provinceName
 
-import area from './api/area'
-Vue.prototype.$area = area
+// import area from './api/covid/area'
+// Vue.prototype.$area = area
 
-import news from './api/news'
-Vue.prototype.$news = news
+// import news from './api/covid/news'
+// Vue.prototype.$news = news
 
-import rumors from './api/rumors'
-Vue.prototype.$rumors = rumors
-
+// import rumors from './api/covid/rumors'
+// Vue.prototype.$rumors = rumors
 
 import './styles/face.css'
 import './styles/face.js'
@@ -74,7 +73,8 @@ import {
   Container,
   Upload,
   MessageBox,
-  Notification
+  Notification,
+  Pagination
 } from 'element-ui'
 // use
 Vue.use(mavonEditor)
@@ -93,6 +93,7 @@ Vue.use(Main)
 Vue.use(Header)
 Vue.use(Upload)
 Vue.use(Container)
+Vue.use(Pagination)
 Vue.use(new VueSocketIo(wesocket))
 Vue.config.productionTip = false
 Vue.prototype.$notify = Notification
@@ -109,7 +110,7 @@ if (process.env.NODE_ENV === 'production') {
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
-
+// 关闭生产环境提示
 Vue.config.productionTip = false
 
 new Vue({

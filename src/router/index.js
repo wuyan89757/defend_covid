@@ -67,7 +67,7 @@ export const constantRoutes = [
       {
         path: 'covid',
         name: 'covid',
-        component: () => import('@/views/covid-19/index'),
+        component: () => import('@/views/covid/index'),
         meta: { title: '新冠肺炎', icon: 'covid' }
       }
     ]
