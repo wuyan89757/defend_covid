@@ -1,4 +1,3 @@
-// import request from '@/utils/request'
 import request from 'axios'
 
 // export function test1(data) {
@@ -12,20 +11,19 @@ export function getNews(data) {
   return request({
     url: '/api/news',
     method: 'get',
-    data
+    params: { ...data } //扩展运算符展开data
   })
 }
 export function getArea(data) {
   return request({
     url: 'api/area',
     method: 'get',
-    data
+    params: data
   })
 }
 export function getOverall(data) {
   return request({
     url: '/api/overall',
-    // url: '/nCoV/api/area',
     method: 'get',
     data
   })
@@ -33,7 +31,6 @@ export function getOverall(data) {
 export function getProvinceName(data) {
   return request({
     url: '/api/provinceName',
-    // url: '/nCoV/api/area',
     method: 'get',
     data
   })
@@ -42,6 +39,6 @@ export function getRumors(data) {
   return request({
     url: '/api/rumors',
     method: 'get',
-    data
+    params: { ...data } //扩展运算符展开data
   })
 }

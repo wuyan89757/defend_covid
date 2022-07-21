@@ -24,7 +24,7 @@ export default {
       active1: null,
       active2: null,
       active3: null,
-      active4: null
+      loading: true
     }
   },
 

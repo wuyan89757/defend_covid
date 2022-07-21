@@ -4,7 +4,12 @@
   <div class="app-container">
     <div class="g-notice">
       <template>
-        <el-table :data="results" style="width: 100%" :row-style="{ height: '80px' }">
+        <el-table
+          :data="results"
+          style="width: 100%"
+          :row-style="{ height: '80px' }"
+          v-loading="loading"
+        >
           <el-table-column label="标题" align="center" width="500">
             <template slot-scope="scope">
               <a class="text" :href="scope.row.sourceUrl">
@@ -19,13 +24,15 @@
           </el-table-column>
           <el-table-column label="发布时间" width="300" align="center">
             <template slot-scope="scope">
+              <!-- 强制类型转换,将string转换为Number -->
               {{ Number(scope.row.pubDate) | fmtDateTime }}
-              <!-- {{ scope.row.mainSummary }} -->
             </template>
           </el-table-column>
         </el-table>
       </template>
       <Pagination
+        @handleCurrentChange="handleChange"
+        @handleSizeChange="handleChange"
         :total="100"
         :limit.sync="pageSize"
         :page-size.sync="pageSize"
@@ -41,32 +48,30 @@ import { getNews } from '@/api/covid'
 import Pagination from '../pagination'
 
 export default {
-  props: {
-    type: {
-      type: String,
-      default: null
-    }
-  },
+  // props: {
+  //   load: {
+  //     type: Boolean
+  //   }
+  // },
   components: {
     Pagination
   },
   data() {
     return {
+      loading: true,
       pageSize: 10, //每页多少条
       currentPage: 1, // 当前页
-      list: [],
+      params: {
+        num: this.pageSize,
+        page: this.currentPage
+      },
       results: []
     }
   },
-  //   data() {
-  //     return {
-  //       list: [],
-  //       params: {
-  //         type: this.type
-  //       }
-  //     }
-  //   },
   methods: {
+    load() {
+      this.loading = false
+    },
     handlerText(item) {
       if (item) {
         if (Array.from(item).length > 20) {
@@ -77,6 +82,9 @@ export default {
       } else {
         return ''
       }
+    },
+    handleChange(params) {
+      this.handlerquery(params)
     },
     // 请求数据
     // fetchDataNoMessage(page, num) {
@@ -90,30 +98,24 @@ export default {
     //     path: `/detail/${id}`
     //   })
     // },
-    handlerquery() {
+    handlerquery(params) {
       // 过滤查询参数，将空字符串的键值对删除掉
-      for (const key in this.params) {
-        if (this.params[key] == '') {
-          delete this.params[key]
+      for (const key in params) {
+        if (params[key] == '') {
+          delete params[key]
         }
       }
-      getNews(this.params).then(res => {
+      getNews(params).then(res => {
         // console.log(res, 'getNews')
         if (res.data.success) {
           this.results = res.data.results
+          this.load()
         }
       })
-    },
-    // addCurrentPage() {
-    //   this.currentPage += 4;
-    // },
-    // reduceCurrentPage() {
-    //   this.currentPage -= 4;
-    // },
-    changePage() {}
+    }
   },
   created() {
-    this.handlerquery()
+    this.handlerquery(this.params)
   }
 }
 </script>

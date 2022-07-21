@@ -18,11 +18,10 @@
 <script>
 // import { scrollTo } from '@/utils/scroll-to'
 
+// import { size } from '@antv/util'
+
 export default {
   name: 'Pagination',
-  data() {
-    return {}
-  },
   props: {
     /**
      * 总页数
@@ -121,17 +120,16 @@ export default {
   methods: {
     // pageSize 改变时会触发 返回当前页面和分页大小
     handleSizeChange(val) {
+      console.log('size-change')
       if (this.currentPage * val > this.total) {
         this.currentPage = 1
       }
-      this.$emit('pagination', { page: this.currentPage, limit: val })
-      //   if (this.autoScroll) {
-      //     scrollTo(0, 800)
-      //   }
+      this.$emit('handleSizeChange', { page: this.currentPage, num: val })
     },
-    // currentPage 改变时会触发 返回当前页面和分页大小
+    // currentPage 改变时会触发 返回page=当前页面和limit=分页大小
     handleCurrentChange(val) {
-      this.$emit('pagination', { page: val, limit: this.pageSize })
+      console.log('current-change')
+      this.$emit('handleCurrentChange', { page: val, num: this.pageSize })
       //   if (this.autoScroll) {
       //     scrollTo(0, 800)
       //   }
