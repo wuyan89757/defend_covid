@@ -1,5 +1,5 @@
-import request from '@/utils/request'
-// import request from 'axios'
+// import request from '@/utils/request'
+import request from 'axios'
 
 // export function test1(data) {
 //   return request({
@@ -10,21 +10,21 @@ import request from '@/utils/request'
 // }
 export function getNews(data) {
   return request({
-    url: 'https://lab.isaaclin.cn/nCoV/api/news',
+    url: '/api/news',
     method: 'get',
     data
   })
 }
 export function getArea(data) {
   return request({
-    url: 'https://lab.isaaclin.cn/nCoV/api/area',
+    url: 'api/area',
     method: 'get',
     data
   })
 }
 export function getOverall(data) {
   return request({
-    url: 'https://lab.isaaclin.cn/nCoV/api/overall',
+    url: '/api/overall',
     // url: '/nCoV/api/area',
     method: 'get',
     data
@@ -32,7 +32,7 @@ export function getOverall(data) {
 }
 export function getProvinceName(data) {
   return request({
-    url: 'https://lab.isaaclin.cn/nCoV/api/provinceName',
+    url: '/api/provinceName',
     // url: '/nCoV/api/area',
     method: 'get',
     data
@@ -40,8 +40,7 @@ export function getProvinceName(data) {
 }
 export function getRumors(data) {
   return request({
-    url: 'https://lab.isaaclin.cn/nCoV/api/rumors',
-    // url: '/nCoV/api/area',
+    url: '/api/rumors',
     method: 'get',
     data
   })
