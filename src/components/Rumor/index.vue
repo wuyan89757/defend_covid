@@ -157,7 +157,10 @@ export default {
         }
       }
       getRumors(this.params).then(res => {
-        this.list = res.data
+        // console.log(res)
+        if (res.data.success) {
+          this.results = res.data.results
+        }
       })
     }
   },
