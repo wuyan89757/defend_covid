@@ -40,11 +40,26 @@ module.exports = {
     },
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
+        //目标服务器，代理访问到https://localhost:7001
         target: 'http://127.0.0.1:7001',
-        changeOrigin: true,
+        // 开启代理：在本地会创建一个虚拟服务端，然后发送请求的数据，
+        // 并同时接收请求的数据，这样服务端和服务端进行数据的交互就不会有跨域问题
+        changeOrigin: true, //开启代理
         pathRewrite: {
+          // 会将 /list-api 替换为 '',也就是 /list-api 会移除，
+          // 如 /list-api/db.json 代理到 https://localhost:7001/db.json
+          // '^/list-api':"",
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
+      },
+      '/api': {
+        target: 'https://lab.isaaclin.cn/nCoV', //API服务器的地址
+        // ws: true,  //代理websockets
+        secure: true, // 如果是https接口，需要配置这个参数
+        changeOrigin: true // 虚拟的站点需要更管origin
+        // pathRewrite: {   //重写路径 比如'/api/aaa/ccc'重写为'/aaa/ccc'
+        //     '^/api': ''
+        // }
       }
     },
     before: require('./mock/mock-server.js')

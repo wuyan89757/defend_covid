@@ -36,7 +36,7 @@
 </template>
 
 <script>
-// import { queryArticle } from '@/api/user'
+import { getRumors } from '@/api/covid'
 import Pagination from '../pagination'
 
 export default {
@@ -156,9 +156,12 @@ export default {
           delete this.params[key]
         }
       }
-      //   queryArticle(this.params).then(res => {
-      //     this.list = res.data
-      //   })
+      getRumors(this.params).then(res => {
+        // console.log(res)
+        if (res.data.success) {
+          this.results = res.data.results
+        }
+      })
     }
   },
   changePage() {
