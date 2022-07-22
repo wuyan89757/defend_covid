@@ -11,14 +11,14 @@ export function getNews(data) {
   return request({
     url: '/api/news',
     method: 'get',
-    params: { ...data } //扩展运算符展开data
+    params: { ...data } // 扩展运算符展开data
   })
 }
-export function getArea(data) {
+export function getArea(params) {
   return request({
-    url: 'api/area',
+    url: '/api/area',
     method: 'get',
-    params: data
+    params
   })
 }
 export function getOverall(data) {
@@ -39,6 +39,6 @@ export function getRumors(data) {
   return request({
     url: '/api/rumors',
     method: 'get',
-    params: { ...data } //扩展运算符展开data
+    params: { ...data } // 扩展运算符展开data
   })
 }
