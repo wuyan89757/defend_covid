@@ -8,6 +8,7 @@
 </template>
 
 <script>
+require('@/styles/echartstheme/chalk')
 import Axios from 'axios'
 import { getArea } from '@/api/covid'
 export default {
@@ -29,7 +30,7 @@ export default {
   methods: {
     // 初始化图表实例对象
     async initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref)
+      this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref, 'chalk')
       this.chartInstance.showLoading()
       // 地图数据http://localhost:9528/json/china.json
       const ret = await Axios.get('http://localhost:9528/json/china.json')
@@ -37,9 +38,16 @@ export default {
       // console.log(ret.data)
       this.$echarts.registerMap('china', ret.data)
       const initOption = {
+        title: {
+          text: '▎现存确诊',
+          left: 20,
+          top: 20
+        },
         geo: {
           type: 'map',
           map: 'china',
+          top: '5%',
+          bottom: '5%',
           label: {
             show: false // 默认不展示标签
           }
@@ -79,6 +87,8 @@ export default {
           type: 'map',
           map: 'china',
           label: {
+            position: 'inside',
+            fontSize: 15,
             show: true // 默认展示标签
           }
         },
@@ -112,13 +122,21 @@ export default {
             { gte: 1, lte: 9, color: '#FAEBD7' },
             { value: 0, color: 'white' } // [0, 0]
           ],
-          calculable: true // 出现滑块
+          textStyle: {
+            fontSize: 15
+          }
+          // calculable: true // 出现滑块
         }
       }
       this.chartInstance.setOption(dataOption)
     },
     screenAdapter() {
-      const adaptOption = {}
+      const titleFontSize = (this.$refs.mapchart_ref.offsetWidth / 100) * 3
+      const adaptOption = {
+        title: {
+          textStyle: { fontSize: titleFontSize }
+        }
+      }
       this.chartInstance.setOption(adaptOption)
       this.chartInstance.resize()
     }
@@ -128,18 +146,17 @@ export default {
 
 <style>
 .map-container {
-  left: 300px;
+  left: 400px;
   top: 50px;
   width: 800px;
   height: 650px;
-  background-color: skyblue;
   border: 1px;
   position: relative;
 }
 
 .map-chart {
-  width: 600px;
-  height: 500px;
+  width: 100%;
+  height: 100%;
   border: 1px;
 }
 </style>
