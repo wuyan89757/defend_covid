@@ -1,7 +1,6 @@
 <!-- covid页面的内部主要组件 数据展示-->
 <template>
-  <div>
-    <h1><center>数据展示页面</center></h1>
+  <div class="app-container">
     <chinamap />
   </div>
 </template>
@@ -15,3 +14,10 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+// .app-container {
+//   h1 {
+//     text-align: center;
+//   }
+// }
+</style>

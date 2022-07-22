@@ -1,9 +1,6 @@
 <template>
   <div class="map-container">
-    <div
-      ref="mapchart_ref"
-      class="map-chart"
-    >地图</div>
+    <div ref="mapchart_ref" class="map-chart">地图</div>
   </div>
 </template>
 
@@ -146,12 +143,9 @@ export default {
 
 <style>
 .map-container {
-  left: 400px;
-  top: 50px;
+  margin: 0 auto;
   width: 800px;
   height: 650px;
-  border: 1px;
-  position: relative;
 }
 
 .map-chart {

@@ -84,6 +84,7 @@ export default {
       }
     },
     handleChange(params) {
+      this.loading = true
       this.handlerquery(params)
     },
     // 请求数据

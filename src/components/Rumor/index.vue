@@ -9,9 +9,24 @@
           :row-style="{ height: '80px' }"
           v-loading="loading"
         >
+          <el-table-column type="expand" width="60">
+            <template slot-scope="scope">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <el-form-item label="谣言标题">
+                  <span>{{ scope.row.title }}</span>
+                </el-form-item>
+                <el-form-item label="谣言内容">
+                  <span>{{ scope.row.body }}</span>
+                </el-form-item>
+                <el-form-item label="事实说明">
+                  <span>{{ scope.row.mainSummary }}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
           <el-table-column label="标题" align="center" width="300">
             <template slot-scope="scope">
-              <div class="text" @click="handlertoRouter(scope.row.id)">
+              <div class="text">
                 {{ scope.row.title }}
               </div>
             </template>
@@ -19,11 +34,11 @@
           <el-table-column label="摘要" align="center">
             <template slot-scope="scope">
               <p v-html="handlerText(scope.row.body)" />
+              <!-- <p v-html="scope.row.body" /> -->
             </template>
           </el-table-column>
-          <el-table-column label="真实情况" width="200" align="center">
+          <el-table-column label="真实情况" width="300" align="center">
             <template slot-scope="scope">
-              <!-- {{ scope.row.publish_time | borthdate }} -->
               {{ scope.row.mainSummary }}
             </template>
           </el-table-column>
@@ -66,9 +81,6 @@ export default {
     load() {
       this.loading = false
     },
-    pagination(p) {
-      this.fetchDataNoMessage(p.page, p.limit)
-    },
     handlerText(item) {
       if (item) {
         if (Array.from(item).length > 20) {
@@ -80,12 +92,8 @@ export default {
         return ''
       }
     },
-    handlertoRouter(id) {
-      this.$router.push({
-        path: `/detail/${id}`
-      })
-    },
     handleChange(params) {
+      this.loading = true
       this.handlerquery(params)
     },
     handlerquery(params) {
@@ -190,6 +198,22 @@ export default {
 
     .z-title {
       font-size: 16px;
+    }
+  }
+  .demo-table-expand {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    font-size: 0;
+    label {
+      width: 90px;
+      color: #99a9bf;
+    }
+    .el-form-item {
+      margin-left: 25px;
+      margin-right: 0;
+      margin-bottom: 0;
+      width: 80%;
     }
   }
 }

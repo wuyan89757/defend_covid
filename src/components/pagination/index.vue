@@ -128,11 +128,7 @@ export default {
     },
     // currentPage 改变时会触发 返回page=当前页面和limit=分页大小
     handleCurrentChange(val) {
-      console.log('current-change')
       this.$emit('handleCurrentChange', { page: val, num: this.pageSize })
-      //   if (this.autoScroll) {
-      //     scrollTo(0, 800)
-      //   }
     }
   }
 }
@@ -147,18 +143,3 @@ export default {
   display: none;
 }
 </style>
-
-<!-- <el-pagination
-      :background="background"
-      :current-page.sync="currentPage"
-      :page-sizes="pagesizes"
-      :page-size.sync="pageSize"
-      :pager-count="pagerCount"
-      :layout="layout"
-      :total="total"
-      v-bind="$attrs"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      @prev-click="handlePrevClick"
-      @next-click="handleNextClick"
-    ></el-pagination> -->
