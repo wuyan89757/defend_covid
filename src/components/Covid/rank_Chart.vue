@@ -1,23 +1,13 @@
 <template>
   <div class="rankchart-container">
     <div class="rankchart-buttongroup">
-      <el-button
-        type="info"
-        @click="classSwitch(0)"
-      >累计确诊</el-button>
-      <el-button
-        type="success"
-        @click="classSwitch(1)"
-      >累计治愈</el-button>
-      <el-button
-        type="warning"
-        @click="classSwitch(2)"
-      >累计死亡</el-button>
+      <div>
+        <el-button type="info" @click="classSwitch(0)">累计确诊</el-button>
+        <el-button type="success" @click="classSwitch(1)">累计治愈</el-button>
+        <el-button type="warning" @click="classSwitch(2)">累计死亡</el-button>
+      </div>
     </div>
-    <div
-      ref="rankchart_ref"
-      class="rank-chart"
-    >排名柱状图</div>
+    <div ref="rankchart_ref" class="rank-chart">排名柱状图</div>
   </div>
 </template>
 
@@ -53,12 +43,12 @@ export default {
   methods: {
     // 初始化图表实例对象
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.rankchart_ref, 'vintage')
+      this.chartInstance = this.$echarts.init(this.$refs.rankchart_ref, null)
       const initOption = {
         title: {
           text: '▎全国省级行政区累计确诊排行',
-          left: 20,
-          top: 20
+          right: 20,
+          top: 25
         },
         grid: {
           top: '10%',
@@ -176,8 +166,8 @@ export default {
       const dataOption0 = {
         title: {
           text: '▎全国省级行政区累计确诊排行',
-          left: 20,
-          top: 20
+          right: 20,
+          top: 25
         },
         tooltip: {
           show: true,
@@ -246,8 +236,8 @@ export default {
       const dataOption1 = {
         title: {
           text: '▎全国省级行政区累计治愈排行',
-          left: 20,
-          top: 20
+          right: 20,
+          top: 25
         },
         tooltip: {
           show: true,
@@ -324,8 +314,8 @@ export default {
       const dataOption2 = {
         title: {
           text: '▎全国省级行政区累计死亡排行',
-          left: 20,
-          top: 20
+          right: 20,
+          top: 25
         },
         tooltip: {
           show: true,
@@ -464,22 +454,35 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .rankchart-container {
-  margin: 0 auto;
-  width: 800px;
-  height: 650px;
-  background-color: rgb(254, 248, 239);
-}
-.rank-chart {
-  width: 100%;
-  height: 90%;
-  bottom: 0%;
-  border: 1px;
-}
-.rankchart-buttongroup {
-  margin: 0 auto;
-  text-align: center;
-  width: 100%;
+  // padding-top: 20px;
+  position: relative;
+  height: 50%;
+  .rankchart-buttongroup {
+    position: absolute;
+    bottom: 26px;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    height: 10%;
+    div {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    button {
+      padding: 4px 8px;
+    }
+  }
+  .rank-chart {
+    width: 100%;
+    // padding-top: 16px;
+    height: 100%;
+    bottom: 0;
+    border: 1px;
+  }
 }
 </style>

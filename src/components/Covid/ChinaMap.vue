@@ -1,9 +1,6 @@
 <template>
   <div class="map-container">
-    <div
-      ref="mapchart_ref"
-      class="map-chart"
-    >地图</div>
+    <div class="map-chart" ref="mapchart_ref">地图</div>
   </div>
 </template>
 
@@ -30,7 +27,8 @@ export default {
   methods: {
     // 初始化图表实例对象
     async initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref, 'chalk')
+      // this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref, 'chalk')
+      this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref, null)
       this.chartInstance.showLoading()
       // 地图数据http://localhost:9528/json/china.json
       const ret = await Axios.get('http://localhost:9528/json/china.json')
@@ -155,16 +153,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .map-container {
-  margin: 0 auto;
-  width: 800px;
-  height: 650px;
-}
-
-.map-chart {
   width: 100%;
-  height: 100%;
-  border: 1px;
+  height: 70%;
+  .map-chart {
+    width: 100%;
+    height: 100%;
+    border: 1px;
+  }
 }
 </style>
