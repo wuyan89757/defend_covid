@@ -1,6 +1,19 @@
 <template>
   <div class="rankchart-container">
-    <button @click="classSwitch(0)">累计确诊</button>
+    <div class="rankchart-buttongroup">
+      <el-button
+        type="info"
+        @click="classSwitch(0)"
+      >累计确诊</el-button>
+      <el-button
+        type="success"
+        @click="classSwitch(1)"
+      >累计治愈</el-button>
+      <el-button
+        type="warning"
+        @click="classSwitch(2)"
+      >累计死亡</el-button>
+    </div>
     <div
       ref="rankchart_ref"
       class="rank-chart"
@@ -59,16 +72,27 @@ export default {
             fontSize: 18
           }
         },
+        toolbox: {
+          show: true,
+          // orient: 'vertical',
+          left: 'right',
+          top: 'top',
+          feature: {
+            dataView: { readOnly: true },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
         xAxis: {
           type: 'category'
         },
         yAxis: {
-          type: 'log', // 各省数据差异悬殊，用对数处理
-          axisLabel: {
+          type: 'log' // 各省数据差异悬殊，用对数处理
+          /* axisLabel: {
             formatter: function (value) {
               return value === 0.1 ? 0 : value
             }
-          }
+          }*/
         },
         series: [
           {
@@ -113,8 +137,14 @@ export default {
           this.ArrValue2 = this.allData.map(item => {
             return item.deadCount
           })
+          this.ArrValue1.sort(function (a, b) {
+            return b - a
+          })
+          console.log(this.ArrValue1, '治愈人数排序')
+          this.ArrValue2.sort(function (a, b) {
+            return b - a
+          })
           this.ArrValue = this.ArrValue0
-          // console.log(provincename_currentconfirmed, 'provincename_currentconfirmed')
           this.updateChart(this.ArrName, this.ArrValue, this.ArrClass)
           this.startInterval()
         }
@@ -128,14 +158,32 @@ export default {
         fixed_value.push(item == 0 ? 0.1 : item)
       }) // 修0
       // console.log(fixed_value, 'fixed_value')
-      const colorArr = [
-        ['#FF0000', '#F5DEB3'], // 红色
-        ['#FFD700', '#FFFFE0'], // 金色
-        ['#2E8B57', '#54FF9F'] // 绿色
-      ]
+      const colorArr0 = [
+        ['#FF0000', '#F5DEB3'], // 红色渐变
+        ['#FFD700', '#FFFFE0'], // 金色渐变
+        ['#2E8B57', '#54FF9F'] // 绿色渐变
+      ] // 累计确诊排行颜色组
+      const colorArr1 = [
+        ['#FF1493', '#FFFFF0'], // 深粉渐变
+        ['#FF83FA', '#FFFFF0'], // magenta渐变
+        ['#CD919E', '#FFFFF0'] // 浅粉渐变
+      ] // 累计治愈排行颜色组
+      const colorArr2 = [
+        ['#696969', '#BEBEBE'], // 黑灰渐变
+        ['#000080', '#F0F8FF'] // 海军蓝渐变
+      ] // 累计死亡排行颜色组
       let targetColor = null
       const dataOption0 = {
+        title: {
+          text: '▎全国省级行政区累计确诊排行',
+          left: 20,
+          top: 20
+        },
         tooltip: {
+          show: true,
+          textStyle: {
+            fontSize: 18
+          },
           trigger: 'axis',
           formatter: function (params) {
             let html = params[0].name
@@ -149,7 +197,11 @@ export default {
         },
 
         xAxis: {
+          type: 'category',
           data: name
+        },
+        yAxis: {
+          type: 'log' // 各省数据差异悬殊，用对数处理
         },
         dataZoom: {
           show: false,
@@ -158,6 +210,8 @@ export default {
         },
         series: [
           {
+            type: 'bar',
+            barMinHeight: 10,
             data: value,
             name: '累计确诊人数',
             label: {
@@ -168,11 +222,11 @@ export default {
             itemStyle: {
               color: arg => {
                 if (arg.value > 10000) {
-                  targetColor = colorArr[0]
+                  targetColor = colorArr0[0]
                 } else if (arg.value > 1000) {
-                  targetColor = colorArr[1]
+                  targetColor = colorArr0[1]
                 } else {
-                  targetColor = colorArr[2]
+                  targetColor = colorArr0[2]
                 }
                 return new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
@@ -190,7 +244,16 @@ export default {
         ]
       }
       const dataOption1 = {
+        title: {
+          text: '▎全国省级行政区累计治愈排行',
+          left: 20,
+          top: 20
+        },
         tooltip: {
+          show: true,
+          textStyle: {
+            fontSize: 18
+          },
           trigger: 'axis',
           formatter: function (params) {
             let html = params[0].name
@@ -204,7 +267,16 @@ export default {
         },
 
         xAxis: {
+          type: 'category',
           data: name
+        },
+        yAxis: {
+          type: 'log', // 各省数据差异悬殊，用对数处理
+          axisLabel: {
+            formatter: function (value) {
+              return value === 0.1 ? 0 : value
+            }
+          }
         },
         dataZoom: {
           show: false,
@@ -213,21 +285,26 @@ export default {
         },
         series: [
           {
-            data: value,
-            name: '累计确诊人数',
+            type: 'bar',
+            barMinHeight: 10,
+            data: fixed_value,
+            name: '累计治愈人数',
             label: {
               show: true,
               position: 'top',
-              valueAnimation: true
+              valueAnimation: true,
+              formatter: function (params) {
+                return params.data === 0.1 ? 0 : params.data
+              }
             },
             itemStyle: {
               color: arg => {
                 if (arg.value > 10000) {
-                  targetColor = colorArr[0]
+                  targetColor = colorArr1[0]
                 } else if (arg.value > 1000) {
-                  targetColor = colorArr[1]
+                  targetColor = colorArr1[1]
                 } else {
-                  targetColor = colorArr[2]
+                  targetColor = colorArr1[2]
                 }
                 return new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
@@ -245,7 +322,16 @@ export default {
         ]
       }
       const dataOption2 = {
+        title: {
+          text: '▎全国省级行政区累计死亡排行',
+          left: 20,
+          top: 20
+        },
         tooltip: {
+          show: true,
+          textStyle: {
+            fontSize: 18
+          },
           trigger: 'axis',
           formatter: function (params) {
             let html = params[0].name
@@ -259,7 +345,16 @@ export default {
         },
 
         xAxis: {
+          type: 'category',
           data: name
+        },
+        yAxis: {
+          type: 'log', // 各省数据差异悬殊，用对数处理
+          axisLabel: {
+            formatter: function (value) {
+              return value === 0.1 ? 0 : value
+            }
+          }
         },
         dataZoom: {
           show: false,
@@ -268,21 +363,24 @@ export default {
         },
         series: [
           {
-            data: value,
-            name: '累计确诊人数',
+            type: 'bar',
+            barMinHeight: 10,
+            data: fixed_value,
+            name: '累计死亡人数',
             label: {
               show: true,
               position: 'top',
-              valueAnimation: true
+              valueAnimation: true,
+              formatter: function (params) {
+                return params.data === 0.1 ? 0 : params.data
+              }
             },
             itemStyle: {
               color: arg => {
-                if (arg.value > 10000) {
-                  targetColor = colorArr[0]
-                } else if (arg.value > 1000) {
-                  targetColor = colorArr[1]
+                if (arg.value > 100) {
+                  targetColor = colorArr2[0]
                 } else {
-                  targetColor = colorArr[2]
+                  targetColor = colorArr2[1]
                 }
                 return new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
@@ -343,6 +441,24 @@ export default {
     classSwitch(classNumber) {
       console.log('类别已转换：', classNumber)
       this.ArrClass = classNumber
+      // this.chartInstance.clear()
+      switch (classNumber) {
+        case 0:
+          this.ArrValue = this.ArrValue0
+          this.updateChart(this.ArrName, this.ArrValue0, classNumber)
+          this.startInterval()
+          break
+        case 1:
+          this.ArrValue = this.ArrValue1
+          this.updateChart(this.ArrName, this.ArrValue1, classNumber)
+          this.startInterval()
+          break
+        case 2:
+          this.ArrValue = this.ArrValue2
+          this.updateChart(this.ArrName, this.ArrValue2, classNumber)
+          this.startInterval()
+          break
+      }
     }
   }
 }
@@ -353,12 +469,17 @@ export default {
   margin: 0 auto;
   width: 800px;
   height: 650px;
-  background-color: skyblue;
+  background-color: rgb(254, 248, 239);
 }
 .rank-chart {
   width: 100%;
   height: 90%;
   bottom: 0%;
   border: 1px;
+}
+.rankchart-buttongroup {
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
 }
 </style>
