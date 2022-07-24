@@ -1,6 +1,9 @@
 <template>
   <div class="map-container">
-    <div ref="mapchart_ref" class="map-chart">地图</div>
+    <div
+      ref="mapchart_ref"
+      class="map-chart"
+    >地图</div>
   </div>
 </template>
 
@@ -72,7 +75,7 @@ export default {
               value: item.currentConfirmedCount
             }
           })
-          console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
+          // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
           this.updateChart(SeriesArr_chinaarea)
         }
       })
@@ -83,11 +86,21 @@ export default {
         geo: {
           type: 'map',
           map: 'china',
+          emphasis: {
+            label: {
+              show: true
+            }
+          },
           label: {
             position: 'inside',
             fontSize: 15,
-            show: true // 默认展示标签
+            show: false // 默认展示标签
           }
+        },
+        tooltip: {
+          trigger: 'item',
+          showDelay: 0,
+          transitionDuration: 0.2
         },
         toolbox: {
           show: true,
@@ -103,6 +116,7 @@ export default {
         series: [
           {
             data: seriesArr,
+            name: '现存确诊人数',
             geoIndex: 0, // 将空气质量的数据和第0个geo配置关联在一起
             type: 'map'
           }
