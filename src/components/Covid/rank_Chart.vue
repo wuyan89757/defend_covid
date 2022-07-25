@@ -2,12 +2,24 @@
   <div class="rankchart-container">
     <div class="rankchart-buttongroup">
       <div>
-        <el-button type="info" @click="classSwitch(0)">累计确诊</el-button>
-        <el-button type="success" @click="classSwitch(1)">累计治愈</el-button>
-        <el-button type="warning" @click="classSwitch(2)">累计死亡</el-button>
+        <el-button
+          type="info"
+          @click="classSwitch(0)"
+        >累计确诊</el-button>
+        <el-button
+          type="success"
+          @click="classSwitch(1)"
+        >累计治愈</el-button>
+        <el-button
+          type="warning"
+          @click="classSwitch(2)"
+        >累计死亡</el-button>
       </div>
     </div>
-    <div ref="rankchart_ref" class="rank-chart">排名柱状图</div>
+    <div
+      ref="rankchart_ref"
+      class="rank-chart"
+    >排名柱状图</div>
   </div>
 </template>
 
@@ -127,11 +139,11 @@ export default {
           this.ArrValue2 = this.allData.map(item => {
             return item.deadCount
           })
-          this.ArrValue1.sort(function (a, b) {
+          this.ArrValue1.sort(function(a, b) {
             return b - a
           })
           console.log(this.ArrValue1, '治愈人数排序')
-          this.ArrValue2.sort(function (a, b) {
+          this.ArrValue2.sort(function(a, b) {
             return b - a
           })
           this.ArrValue = this.ArrValue0
@@ -175,7 +187,7 @@ export default {
             fontSize: 18
           },
           trigger: 'axis',
-          formatter: function (params) {
+          formatter: function(params) {
             let html = params[0].name
             params.forEach((item, index) => {
               html += `<br/>${item.marker + item.seriesName}: ${
@@ -245,7 +257,7 @@ export default {
             fontSize: 18
           },
           trigger: 'axis',
-          formatter: function (params) {
+          formatter: function(params) {
             let html = params[0].name
             params.forEach((item, index) => {
               html += `<br/>${item.marker + item.seriesName}: ${
@@ -263,7 +275,7 @@ export default {
         yAxis: {
           type: 'log', // 各省数据差异悬殊，用对数处理
           axisLabel: {
-            formatter: function (value) {
+            formatter: function(value) {
               return value === 0.1 ? 0 : value
             }
           }
@@ -283,7 +295,7 @@ export default {
               show: true,
               position: 'top',
               valueAnimation: true,
-              formatter: function (params) {
+              formatter: function(params) {
                 return params.data === 0.1 ? 0 : params.data
               }
             },
@@ -323,7 +335,7 @@ export default {
             fontSize: 18
           },
           trigger: 'axis',
-          formatter: function (params) {
+          formatter: function(params) {
             let html = params[0].name
             params.forEach((item, index) => {
               html += `<br/>${item.marker + item.seriesName}: ${
@@ -341,7 +353,7 @@ export default {
         yAxis: {
           type: 'log', // 各省数据差异悬殊，用对数处理
           axisLabel: {
-            formatter: function (value) {
+            formatter: function(value) {
               return value === 0.1 ? 0 : value
             }
           }
@@ -361,7 +373,7 @@ export default {
               show: true,
               position: 'top',
               valueAnimation: true,
-              formatter: function (params) {
+              formatter: function(params) {
                 return params.data === 0.1 ? 0 : params.data
               }
             },
@@ -417,6 +429,8 @@ export default {
     startInterval() {
       if (this.timeId) {
         clearInterval(this.timeId)
+        this.zoomStartValue = -1
+        this.zoomEndValue = 8
       }
       this.timeId = setInterval(() => {
         this.zoomStartValue++
