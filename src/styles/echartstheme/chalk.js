@@ -21,7 +21,7 @@
   }
   echarts.registerTheme('chalk', {
     color: ['#fc97af', '#87f7cf', '#f7f494', '#72ccff', '#f7c5a0', '#d4a4eb', '#d2f5a6', '#76f2f2'],
-    backgroundColor: 'rgba(176,224,230,2)',
+    backgroundColor: 'rgba(254, 248, 239,2)',
     textStyle: {},
     title: {
       textStyle: {

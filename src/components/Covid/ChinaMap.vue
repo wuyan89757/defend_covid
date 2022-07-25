@@ -1,6 +1,9 @@
 <template>
   <div class="map-container">
-    <div class="map-chart" ref="mapchart_ref">地图</div>
+    <div
+      ref="mapchart_ref"
+      class="map-chart"
+    >地图</div>
   </div>
 </template>
 
@@ -39,7 +42,10 @@ export default {
         title: {
           text: '▎现存确诊',
           left: 20,
-          top: 20
+          top: 20,
+          textStyle: {
+            color: 'black'
+          }
         },
         geo: {
           type: 'map',
@@ -48,6 +54,10 @@ export default {
           bottom: '5%',
           label: {
             show: false // 默认不展示标签
+          },
+          itemStyle: {
+            borderWidth: 2, // 设置外层边框
+            borderColor: '#f8911b'
           }
         }
       }
@@ -116,7 +126,12 @@ export default {
             data: seriesArr,
             name: '现存确诊人数',
             geoIndex: 0, // 将空气质量的数据和第0个geo配置关联在一起
-            type: 'map'
+            type: 'map',
+            itemStyle: {
+              borderColor: '#a18a3a',
+              borderWidth: 1,
+              borderType: 'dashed'
+            }
           }
         ],
         visualMap: {
