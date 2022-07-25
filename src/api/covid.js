@@ -1,24 +1,24 @@
-import request from 'axios'
 import Axios from '@/utils/request-api'
-// export function test1(data) {
-//   return request({
-//     url: 'dev-api/test1',
-//     method: 'post',
-//     data
-//   })
-// }
+
+export function getMap() {
+  return Axios.request({
+    url: 'http://localhost:9528/json/china.json',
+    method: 'get'
+    // params: { ...data } // 扩展运算符展开dataW
+  })
+}
 export function getNews(data) {
   return Axios.request({
     url: '/api/news',
     method: 'get',
-    params: { ...data } // 扩展运算符展开data
+    params: { ...data } // 扩展运算符展开dataW
   })
 }
-export function getArea(params) {
+export function getArea(data) {
   return Axios.request({
     url: '/api/area',
     method: 'get',
-    params
+    params: { ...data }
   })
 }
 export function getOverall(data) {

@@ -11,11 +11,11 @@ const service = axios.create({
   timeout: 5000 // request timeout
 })
 // axios.defaults.withCredentials = true
-// request interceptor
+
+// 添加请求拦截器
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
-
+    // 在发送请求之前做些什么
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -25,28 +25,24 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    // do something with request error
+    // 对请求错误做些什么
     console.log(error) // for debug
     return Promise.reject(error)
   }
 )
 
-// response interceptor
+// 添加响应拦截器
 service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
    * Please return  response => response
    */
 
-  /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
+  // 2xx 范围内的状态码都会触发该函数。
+  // 对响应数据做点什么
   response => {
     const res = response.data
-
-    // if the custom code is not 20000, it is judged as an error.
+    // if the custom code is not 200, it is judged as an error.
     if (res.status !== 200) {
       Message({
         message: res.message || 'Error',
@@ -76,8 +72,10 @@ service.interceptors.response.use(
       return res
     }
   },
+  // 超出 2xx 范围的状态码都会触发该函数。
+  // 对响应错误做点什么
   error => {
-    console.log('err' + error) // for debug
+    // console.log('err' + error) // for debug
     Message({
       message: error.message,
       type: 'error',
@@ -86,6 +84,7 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+// 自定义post
 export function get(url, params) {
   return service.get(url, {
     params, // get 请求时带的参数

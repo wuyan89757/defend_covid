@@ -1,26 +1,28 @@
 <template>
   <div class="map-container">
-    <div
-      ref="mapchart_ref"
-      class="map-chart"
-    >地图</div>
+    <div ref="mapchart_ref" class="map-chart">地图</div>
   </div>
 </template>
 
 <script>
 require('@/styles/echartstheme/chalk')
-import Axios from 'axios'
-import { getArea } from '@/api/covid'
+// import Axios from 'axios'
+import { getArea, getMap } from '@/api/covid'
 export default {
   data() {
     return {
-      chartInstance: null,
-      allData: null
+      params: {
+        country: '中国',
+        sort: 'confirmedCount'
+      },
+      chartInstance: null
+      // allData: null
     }
   },
   mounted() {
+    // sessionStorage.setItem('time', '')
     this.initChart()
-    this.getData()
+    this.getData(this.params)
     window.addEventListener('resize', this.screenAdapter)
     this.screenAdapter()
   },
@@ -28,15 +30,22 @@ export default {
     window.removeEventListener('resize', this.screenAdapter)
   },
   methods: {
+    getNow() {
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const dates = date.getDate()
+      const now = year + '年' + month + '月' + dates + '日 '
+      return now
+    },
     // 初始化图表实例对象
     async initChart() {
       // this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref, 'chalk')
       this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref, null)
       this.chartInstance.showLoading()
       // 地图数据http://localhost:9528/json/china.json
-      const ret = await Axios.get('http://localhost:9528/json/china.json')
-      // console.log(ret)
-      // console.log(ret.data)
+      const ret = await getMap()
+      console.log(ret)
       this.$echarts.registerMap('china', ret.data)
       const initOption = {
         title: {
@@ -65,31 +74,79 @@ export default {
     },
     // 获取数据
     // 对this.allData赋值后调用updatechart更新图表
-    getData() {
-      this.params = {
-        country: '中国',
-        sort: 'confirmedCount' // 按确诊排序(可能出现乱码)
+    getData(params) {
+      // localStorage.clear()
+      const now = this.getNow()
+      // console.log(typeof now, typeof sessionStorage.getItem('time'))
+      // console.log(now, sessionStorage.getItem('time'))
+      // console.log(now !== sessionStorage.getItem('time'))
+      // if (now !== this.$localStorage.get('time')) {
+      if (now !== sessionStorage.getItem('time')) {
+        // this.$localStorage.set('time', now)
+
+        getArea(params).then(res => {
+          // console.log(res, 'getArea')
+          if (res.data.success) {
+            // 返回结果第一行是全国数据要切掉
+            // const all = res.data.results.slice(1, 35)
+            // this.allData = res.data.results.slice(1, 35)
+
+            // console.log(this.allData)
+            // const SeriesArr_chinaarea = all.map(item => {
+            const data = res.data.results.slice(1, 35).map(item => {
+              return {
+                name: item.provinceShortName,
+                value: item.currentConfirmedCount
+              }
+            })
+            sessionStorage.setItem('data', JSON.stringify(data))
+            sessionStorage.setItem('time', now)
+            // this.$localStorage.set('data', data)
+            // console.log(111)
+            // console.log(
+            //   JSON.parse(sessionStorage.getItem('data')) === data,
+            //   // sessionStorage.getItem('data', JSON.parse(data)),
+            //   typeof JSON.parse(sessionStorage.getItem('data'))
+            // )
+            // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
+          }
+        })
       }
-      getArea(this.params).then(res => {
-        // console.log(res, 'getArea')
-        if (res.data.success) {
-          // 返回结果第一行是全国数据要切掉
-          this.allData = res.data.results.slice(1, 35)
-          this.chartInstance.hideLoading()
-          // console.log(this.allData)
-          const SeriesArr_chinaarea = this.allData.map(item => {
-            return {
-              name: item.provinceShortName,
-              value: item.currentConfirmedCount
-            }
-          })
-          // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
-          this.updateChart(SeriesArr_chinaarea)
-        }
-      })
+      // console.log(
+      //   JSON.parse(sessionStorage.getItem('data')),
+      //   // sessionStorage.getItem('data', JSON.parse(data)),
+      //   typeof JSON.parse(sessionStorage.getItem('data')),
+      //   111
+      // )
+      // console.log(this.$localStorage.get('data'), typeof this.$localStorage.get('data'), out)
+      // this.updateChart(this.$localStorage.get('data'))
+      this.updateChart(JSON.parse(sessionStorage.getItem('data')))
+      this.chartInstance.hideLoading()
     },
+
+    // getData(params) {
+    //   getArea(params).then(res => {
+    //     // console.log(res, 'getArea')
+    //     if (res.data.success) {
+    //       // 返回结果第一行是全国数据要切掉
+    //       this.allData = res.data.results.slice(1, 35)
+    //       this.chartInstance.hideLoading()
+    //       // console.log(this.allData)
+    //       const SeriesArr_chinaarea = this.allData.map(item => {
+    //         return {
+    //           name: item.provinceShortName,
+    //           value: item.currentConfirmedCount
+    //         }
+    //       })
+    //       // this.$localStorage.set('data', SeriesArr_chinaarea)
+    //       // console.log(this.$localStorage.get('data'), typeof this.$localStorage.get('data'))
+    //       // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
+    //       this.updateChart(SeriesArr_chinaarea)
+    //     }
+    //   })
+    // },
     // 更新图表
-    updateChart(seriesArr) {
+    updateChart(arr) {
       const dataOption = {
         geo: {
           type: 'map',
@@ -123,7 +180,7 @@ export default {
         },
         series: [
           {
-            data: seriesArr,
+            data: arr,
             name: '现存确诊人数',
             geoIndex: 0, // 将空气质量的数据和第0个geo配置关联在一起
             type: 'map',

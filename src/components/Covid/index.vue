@@ -11,7 +11,7 @@
     </div>
 
     <div class="right">
-      <Rank_ChartVue />
+      <!-- <Rank_ChartVue /> -->
       <div class="right_bottom">右侧各大洲数据</div>
     </div>
   </div>
