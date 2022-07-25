@@ -1,6 +1,9 @@
 <template>
   <div class="map-container">
-    <div ref="mapchart_ref" class="map-chart">地图</div>
+    <div
+      ref="mapchart_ref"
+      class="map-chart"
+    >地图</div>
   </div>
 </template>
 
@@ -22,7 +25,6 @@ export default {
   mounted() {
     // sessionStorage.setItem('time', '')
     this.initChart()
-    this.getData(this.params)
     window.addEventListener('resize', this.screenAdapter)
     this.screenAdapter()
   },
@@ -41,11 +43,11 @@ export default {
     // 初始化图表实例对象
     async initChart() {
       // this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref, 'chalk')
-      this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref, null)
+      this.chartInstance = this.$echarts.init(this.$refs.mapchart_ref)
       this.chartInstance.showLoading()
       // 地图数据http://localhost:9528/json/china.json
       const ret = await getMap()
-      console.log(ret)
+      // console.log('注册图表')
       this.$echarts.registerMap('china', ret.data)
       const initOption = {
         title: {
@@ -71,6 +73,8 @@ export default {
         }
       }
       this.chartInstance.setOption(initOption)
+      // console.log('初始化完成')
+      this.getData(this.params)
     },
     // 获取数据
     // 对this.allData赋值后调用updatechart更新图表
@@ -81,37 +85,42 @@ export default {
       // console.log(now, sessionStorage.getItem('time'))
       // console.log(now !== sessionStorage.getItem('time'))
       // if (now !== this.$localStorage.get('time')) {
-      if (now !== sessionStorage.getItem('time')) {
-        // this.$localStorage.set('time', now)
+      // if (now !== sessionStorage.getItem('time')) {
+      // this.$localStorage.set('time', now)
 
-        getArea(params).then(res => {
-          // console.log(res, 'getArea')
-          if (res.data.success) {
-            // 返回结果第一行是全国数据要切掉
-            // const all = res.data.results.slice(1, 35)
-            // this.allData = res.data.results.slice(1, 35)
+      getArea(params).then(res => {
+        console.log(res, 'getArea')
+        if (res.data.success) {
+          // 返回结果第一行是全国数据要切掉
+          // const all = res.data.results.slice(1, 35)
+          // this.allData = res.data.results.slice(1, 35)
 
-            // console.log(this.allData)
-            // const SeriesArr_chinaarea = all.map(item => {
-            const data = res.data.results.slice(1, 35).map(item => {
-              return {
-                name: item.provinceShortName,
-                value: item.currentConfirmedCount
-              }
-            })
-            sessionStorage.setItem('data', JSON.stringify(data))
-            sessionStorage.setItem('time', now)
-            // this.$localStorage.set('data', data)
-            // console.log(111)
-            // console.log(
-            //   JSON.parse(sessionStorage.getItem('data')) === data,
-            //   // sessionStorage.getItem('data', JSON.parse(data)),
-            //   typeof JSON.parse(sessionStorage.getItem('data'))
-            // )
-            // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
-          }
-        })
-      }
+          // console.log(this.allData)
+          // const SeriesArr_chinaarea = all.map(item => {
+          const data = res.data.results.slice(1, 35).map(item => {
+            return {
+              name: item.provinceShortName,
+              value: item.currentConfirmedCount
+            }
+          })
+          sessionStorage.setItem('data', JSON.stringify(data))
+          sessionStorage.setItem('time', now)
+          // this.$localStorage.set('data', data)
+          // console.log(111)
+          // console.log(
+          //   JSON.parse(sessionStorage.getItem('data')) === data,
+          //   // sessionStorage.getItem('data', JSON.parse(data)),
+          //   typeof JSON.parse(sessionStorage.getItem('data'))
+          // )
+          // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
+        }
+        // console.log('数据切片完成')
+        // console.log(JSON.parse(sessionStorage.getItem('data')), '数据切片')
+        this.updateChart(JSON.parse(sessionStorage.getItem('data')))
+        console.log('数据发送给图表完成')
+        this.chartInstance.hideLoading()
+      })
+      // }
       // console.log(
       //   JSON.parse(sessionStorage.getItem('data')),
       //   // sessionStorage.getItem('data', JSON.parse(data)),
@@ -120,8 +129,6 @@ export default {
       // )
       // console.log(this.$localStorage.get('data'), typeof this.$localStorage.get('data'), out)
       // this.updateChart(this.$localStorage.get('data'))
-      this.updateChart(JSON.parse(sessionStorage.getItem('data')))
-      this.chartInstance.hideLoading()
     },
 
     // getData(params) {
@@ -147,6 +154,8 @@ export default {
     // },
     // 更新图表
     updateChart(arr) {
+      // console.log('数据更新前')
+      arr.push({ name: '南海诸岛', value: 0 })
       const dataOption = {
         geo: {
           type: 'map',
@@ -170,7 +179,7 @@ export default {
         toolbox: {
           show: true,
           // orient: 'vertical',
-          left: 'right',
+          left: 'center',
           top: 'top',
           feature: {
             dataView: { readOnly: true },
@@ -182,7 +191,7 @@ export default {
           {
             data: arr,
             name: '现存确诊人数',
-            geoIndex: 0, // 将空气质量的数据和第0个geo配置关联在一起
+            geoIndex: 0, // 将确诊人数的数据和第0个geo配置关联在一起
             type: 'map',
             itemStyle: {
               borderColor: '#a18a3a',
@@ -209,6 +218,7 @@ export default {
           // calculable: true // 出现滑块
         }
       }
+      // console.log('数据填入地图')
       this.chartInstance.setOption(dataOption)
     },
     screenAdapter() {
