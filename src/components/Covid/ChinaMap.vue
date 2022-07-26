@@ -1,9 +1,6 @@
 <template>
   <div class="map-container">
-    <div
-      ref="mapchart_ref"
-      class="map-chart"
-    >地图</div>
+    <div ref="mapchart_ref" class="map-chart"></div>
   </div>
 </template>
 
@@ -19,11 +16,11 @@ export default {
         sort: 'confirmedCount'
       },
       chartInstance: null
-      // allData: null
     }
   },
   mounted() {
     // sessionStorage.setItem('time', '')
+    // console.log('挂载完成')
     this.initChart()
     window.addEventListener('resize', this.screenAdapter)
     this.screenAdapter()
@@ -78,84 +75,48 @@ export default {
     },
     // 获取数据
     // 对this.allData赋值后调用updatechart更新图表
-    getData(params) {
+    async getData(params) {
       // localStorage.clear()
       const now = this.getNow()
       // console.log(typeof now, typeof sessionStorage.getItem('time'))
       // console.log(now, sessionStorage.getItem('time'))
       // console.log(now !== sessionStorage.getItem('time'))
-      // if (now !== this.$localStorage.get('time')) {
-      // if (now !== sessionStorage.getItem('time')) {
-      // this.$localStorage.set('time', now)
+      if (now !== sessionStorage.getItem('time')) {
+        // this.$localStorage.set('time', now)
 
-      getArea(params).then(res => {
-        console.log(res, 'getArea')
-        if (res.data.success) {
-          // 返回结果第一行是全国数据要切掉
-          // const all = res.data.results.slice(1, 35)
-          // this.allData = res.data.results.slice(1, 35)
-
-          // console.log(this.allData)
-          // const SeriesArr_chinaarea = all.map(item => {
-          const data = res.data.results.slice(1, 35).map(item => {
-            return {
-              name: item.provinceShortName,
-              value: item.currentConfirmedCount
-            }
-          })
-          sessionStorage.setItem('data', JSON.stringify(data))
-          sessionStorage.setItem('time', now)
-          // this.$localStorage.set('data', data)
-          // console.log(111)
-          // console.log(
-          //   JSON.parse(sessionStorage.getItem('data')) === data,
-          //   // sessionStorage.getItem('data', JSON.parse(data)),
-          //   typeof JSON.parse(sessionStorage.getItem('data'))
-          // )
-          // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
-        }
-        // console.log('数据切片完成')
-        // console.log(JSON.parse(sessionStorage.getItem('data')), '数据切片')
-        this.updateChart(JSON.parse(sessionStorage.getItem('data')))
-        console.log('数据发送给图表完成')
-        this.chartInstance.hideLoading()
-      })
-      // }
-      // console.log(
-      //   JSON.parse(sessionStorage.getItem('data')),
-      //   // sessionStorage.getItem('data', JSON.parse(data)),
-      //   typeof JSON.parse(sessionStorage.getItem('data')),
-      //   111
-      // )
-      // console.log(this.$localStorage.get('data'), typeof this.$localStorage.get('data'), out)
-      // this.updateChart(this.$localStorage.get('data'))
+        await getArea(params).then(res => {
+          // console.log(res, 'getArea')
+          if (res.data.success) {
+            // 返回结果第一行是全国数据要切掉
+            const data = res.data.results.slice(1, 35).map(item => {
+              return {
+                name: item.provinceShortName,
+                value: item.currentConfirmedCount
+              }
+            })
+            sessionStorage.setItem('data', JSON.stringify(data))
+            sessionStorage.setItem('time', now)
+            // this.$localStorage.set('data', data)
+            // console.log(111)
+            // console.log(
+            //   JSON.parse(sessionStorage.getItem('data')) === data,
+            //   // sessionStorage.getItem('data', JSON.parse(data)),
+            //   typeof JSON.parse(sessionStorage.getItem('data'))
+            // )
+            // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
+          }
+          // console.log('数据切片完成，存入local')
+          // console.log(JSON.parse(sessionStorage.getItem('data')), '数据切片')
+        })
+      }
+      this.updateChart(JSON.parse(sessionStorage.getItem('data')))
+      // console.log('数据发送给图表完成')
+      this.chartInstance.hideLoading()
     },
-
-    // getData(params) {
-    //   getArea(params).then(res => {
-    //     // console.log(res, 'getArea')
-    //     if (res.data.success) {
-    //       // 返回结果第一行是全国数据要切掉
-    //       this.allData = res.data.results.slice(1, 35)
-    //       this.chartInstance.hideLoading()
-    //       // console.log(this.allData)
-    //       const SeriesArr_chinaarea = this.allData.map(item => {
-    //         return {
-    //           name: item.provinceShortName,
-    //           value: item.currentConfirmedCount
-    //         }
-    //       })
-    //       // this.$localStorage.set('data', SeriesArr_chinaarea)
-    //       // console.log(this.$localStorage.get('data'), typeof this.$localStorage.get('data'))
-    //       // console.log(SeriesArr_chinaarea, 'SeriesArr_chinaarea')
-    //       this.updateChart(SeriesArr_chinaarea)
-    //     }
-    //   })
-    // },
     // 更新图表
     updateChart(arr) {
       // console.log('数据更新前')
-      arr.push({ name: '南海诸岛', value: 0 })
+      // arr.push({ name: '南海诸岛', value: 0 })
       const dataOption = {
         geo: {
           type: 'map',

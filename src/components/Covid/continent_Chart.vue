@@ -1,9 +1,6 @@
 <template>
   <div class="continent-container">
-    <div
-      ref="continentchart_ref"
-      class="continent-chart"
-    >各大洲图</div>
+    <div ref="continentchart_ref" class="continent-chart"></div>
   </div>
 </template>
 
@@ -27,7 +24,7 @@ export default {
   },
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.continentchart_ref, 'vintage')
+      this.chartInstance = this.$echarts.init(this.$refs.continentchart_ref)
       this.chartInstance.showLoading()
       const initOption = {
         title: {
@@ -85,7 +82,7 @@ export default {
       const dataOption = {
         tooltip: {
           trigger: 'item',
-          formatter: function(param) {
+          formatter: function (param) {
             return (
               param.name +
               ': ' +
@@ -101,7 +98,7 @@ export default {
             name: '现存确诊人数',
             data: showData,
             startAngle: 178,
-            radius: [50, 250],
+            radius: '58%',
             center: ['50%', '50%'],
             roseType: 'area',
             itemStyle: {
@@ -109,7 +106,7 @@ export default {
             },
             label: {
               show: true,
-              formatter: function(param) {
+              formatter: function (param) {
                 return (
                   param.name + '占比: ' + (((param.value - number) / sum) * 100).toFixed(4) + '%'
                 )
@@ -143,31 +140,30 @@ export default {
       }
       this.chartInstance.setOption(dataOption)
       this.chartInstance.hideLoading()
-    }
-  },
-  screenAdapter() {
-    const titleFontSize = (this.$refs.rankchart_ref.offsetWidth / 100) * 3
-    const adaptOption = {
-      title: {
-        textStyle: { fontSize: titleFontSize / 2 }
+    },
+    screenAdapter() {
+      const titleFontSize = (this.$refs.continentchart_ref.offsetWidth / 100) * 4
+      const adaptOption = {
+        title: {
+          textStyle: { fontSize: titleFontSize }
+        }
       }
+      this.chartInstance.setOption(adaptOption)
+      this.chartInstance.resize()
     }
-    this.chartInstance.setOption(adaptOption)
-    this.chartInstance.resize()
   }
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .continent-container {
-  margin: 0 auto;
-  width: 800px;
-  height: 650px;
-}
-.continent-chart {
-  width: 100%;
-  height: 90%;
-  bottom: 0%;
-  border: 1px;
+  height: 50%;
+  // width: 100%;
+  .continent-chart {
+    width: 100%;
+    height: 90%;
+    bottom: 0%;
+    border: 1px;
+  }
 }
 </style>

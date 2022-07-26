@@ -1,57 +1,93 @@
 <template>
-  <div class="basic-data-item">
-    <div class="basic-data-item-title">{{label}}
-      <i v-if="inCrValue > 0" class="el-icon-caret-top" style="color: #60FE5E;"></i>
-      <i v-else class="el-icon-caret-bottom" style="color: #F44182;"></i>
-      <span :class="[ inCrValue > 0 ? valueUpClass: valueDownClass, valueClass]">
-        {{ inCrValue }}
-      </span>
-    </div>
-    <div class="basic-data-item-value">
-      <dv-digital-flop
-        :config="config"
-        style="width: 140px; height: 50px"
-      />
-    </div>
+  <div class="container">
+    <div class="pro_title">▎世界各大洲现存确诊占比图</div>
+    <ul>
+      <li>
+        <strong style="color: rgb(247, 76, 49)">4,702,385</strong>
+        <span>现存确诊</span>
+        <div class="createCount">
+          <b>较昨日<em style="color: rgb(247, 76, 49)">+17,624</em></b>
+        </div>
+      </li>
+
+      <li>
+        <strong style="color: rgb(247, 76, 49)">20,459</strong>
+        <span>境外输入</span>
+        <div class="createCount">
+          <b>较昨日<em style="color: rgb(247, 130, 7)">+50</em></b>
+        </div>
+      </li>
+
+      <li>
+        <strong style="color: rgb(162, 90, 78)">6,972</strong>
+        <span>现存无症状</span>
+        <div class="createCount">
+          <b>较昨日<em style="color: rgb(162, 90, 78)">+499</em></b>
+        </div>
+      </li>
+
+      <li>
+        <strong style="color: rgb(174, 33, 44)">5,028,631</strong>
+        <span>累计确诊</span>
+        <div class="createCount">
+          <b>较昨日<em style="color: rgb(174, 33, 44)">+17,965</em></b>
+        </div>
+      </li>
+      <li>
+        <strong style="color: rgb(40, 183, 163)">302,893</strong>
+        <span>累计治愈</span>
+        <div class="createCount">
+          <b>较昨日<em style="color: rgb(40, 183, 163)">+285</em></b>
+        </div>
+      </li>
+      <li>
+        <strong style="color: ">23,353</strong>
+        <span>累计死亡</span>
+        <div class="createCount">
+          <b>较昨日<em style="color: rgb(93, 112, 146)">+56</em></b>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    label: String,
-    config: Object,
-    inCrValue: Number
-  },
-  data() {
-    return {
-      valueUpClass: 'incremento-up-value',
-      valueDownClass: 'incremento-down-value',
-      valueClass: 'basic-data-item-incremento-value'
+
+<style scoped lang="scss">
+.container {
+  height: 30%;
+  > div {
+    // position: absolute;
+    width: 100%;
+    height: 8%;
+    margin-bottom: 6px;
+  }
+  ul {
+    display: flex;
+    width: 100%;
+    height: 94%;
+    // justify-items: ;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 33.3%;
+      height: 45%;
+      padding-top: 10px;
+    }
+    .createCount {
+      margin-top: 15px;
+      b em {
+        margin-left: 6px;
+      }
     }
   }
 }
-</script>
-<style scoped>
-.basic-data-item {
-  background: #0f142b;
-  margin: 0 5px 5px 5px;
-  padding: 15px 10px 10px 10px;
-  border-radius: 5px;
-}
-.incremento-up-value {
-  color: #60FE5E;
-}
-.incremento-down-value {
-  color: #F44182;
-}
-.basic-data-item-title {
-  color: #bcbcbe;
-  font-size: 14px;
-  padding-bottom: 5px;
-}
-.basic-data-item-value {
-  color: #fff;
-  font-size: 40px;
-  font-weight: bolder;
+
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 </style>
